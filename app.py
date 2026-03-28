@@ -18,35 +18,175 @@ st.set_page_config(page_title="IndiaFin Dashboard", layout="wide")
 st.markdown(
     """
 <style>
-  [data-testid="stAppViewContainer"] { background: #f0f6ff; }
-  [data-testid="stSidebar"]          { background: #1a56db; }
-  [data-testid="stSidebar"] *        { color: #ffffff !important; }
-  [data-testid="stSidebar"] .stSelectbox label { color: #dbeafe !important; }
-  [data-testid="stSidebar"] [data-baseweb="select"] > div { background: #1648c0; border-color: #3b82f6; }
-  h1, h2, h3 { color: #111827; }
-  [data-testid="stMetricValue"]  { color: #1a56db; font-weight: 600; }
-  [data-testid="stMetricLabel"]  { color: #6b7280; }
-  [data-testid="metric-container"] {
-    background: white;
-    border: 1px solid #dbeafe;
-    border-radius: 12px;
-    padding: 16px;
+  :root {
+    --bg-main: #07111f;
+    --bg-panel: rgba(10, 20, 38, 0.92);
+    --bg-card: rgba(14, 28, 50, 0.88);
+    --bg-card-soft: rgba(17, 35, 60, 0.72);
+    --border: rgba(118, 162, 255, 0.22);
+    --text-main: #e7eefc;
+    --text-soft: #93a8cf;
+    --accent: #5aa7ff;
+    --accent-2: #33d0ff;
+    --green: #3ddc97;
+    --amber: #ffb347;
   }
-  .stInfo { background: #eff6ff !important; border-left: 4px solid #1a56db !important; color: #1e3a8a !important; }
-  hr { border-color: #dbeafe; }
+  [data-testid="stAppViewContainer"] {
+    background:
+      radial-gradient(circle at top left, rgba(59, 130, 246, 0.18), transparent 32%),
+      radial-gradient(circle at top right, rgba(51, 208, 255, 0.14), transparent 28%),
+      linear-gradient(180deg, #08111d 0%, #07111f 48%, #040914 100%);
+    color: var(--text-main);
+  }
+  [data-testid="stHeader"] {
+    background: rgba(4, 9, 20, 0.25);
+  }
+  [data-testid="stSidebar"] {
+    background:
+      linear-gradient(180deg, rgba(9, 18, 34, 0.98) 0%, rgba(8, 16, 29, 0.98) 100%);
+    border-right: 1px solid rgba(118, 162, 255, 0.12);
+  }
+  [data-testid="stSidebar"] * {
+    color: var(--text-main) !important;
+  }
+  [data-testid="stSidebar"] .stSelectbox label,
+  [data-testid="stSidebar"] .stMarkdown {
+    color: var(--text-soft) !important;
+  }
+  [data-testid="stSidebar"] [data-baseweb="select"] > div,
+  [data-testid="stSidebar"] .stSelectbox div[data-baseweb="select"] > div {
+    background: rgba(14, 28, 50, 0.9);
+    border: 1px solid rgba(118, 162, 255, 0.18);
+    border-radius: 14px;
+    box-shadow: none;
+  }
+  [data-testid="stSidebar"] [data-baseweb="select"] svg {
+    fill: var(--accent-2);
+  }
+  [data-testid="stMarkdownContainer"] p,
+  [data-testid="stMarkdownContainer"] li,
+  [data-testid="stCaptionContainer"] {
+    color: var(--text-soft);
+  }
+  h1, h2, h3 {
+    color: var(--text-main);
+    letter-spacing: -0.02em;
+  }
+  .block-container {
+    padding-top: 2.2rem;
+  }
+  .hero {
+    padding: 1.5rem 1.6rem;
+    border-radius: 24px;
+    border: 1px solid var(--border);
+    background:
+      linear-gradient(135deg, rgba(15, 32, 56, 0.94) 0%, rgba(8, 18, 33, 0.94) 100%);
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.28);
+    margin-bottom: 1.15rem;
+  }
+  .hero-kicker {
+    color: #8cb6ff;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin-bottom: 0.45rem;
+    font-weight: 700;
+  }
+  .hero-title {
+    font-size: 2.3rem;
+    line-height: 1.05;
+    font-weight: 800;
+    color: #f5f8ff;
+    margin-bottom: 0.55rem;
+  }
+  .hero-subtitle {
+    max-width: 780px;
+    color: var(--text-soft);
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+  .hero-strip {
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+  }
+  .hero-pill {
+    padding: 0.45rem 0.8rem;
+    border-radius: 999px;
+    background: rgba(90, 167, 255, 0.12);
+    border: 1px solid rgba(90, 167, 255, 0.18);
+    color: #d7e7ff;
+    font-size: 0.88rem;
+  }
+  [data-testid="metric-container"] {
+    background:
+      linear-gradient(180deg, rgba(15, 30, 55, 0.9) 0%, rgba(10, 22, 40, 0.9) 100%);
+    border: 1px solid rgba(118, 162, 255, 0.16);
+    border-radius: 20px;
+    padding: 18px;
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.18);
+  }
+  [data-testid="stMetricLabel"] {
+    color: var(--text-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.74rem;
+    font-weight: 700;
+  }
+  [data-testid="stMetricValue"] {
+    color: #f5f8ff;
+    font-weight: 800;
+  }
+  .stInfo, .stAlert, [data-testid="stNotification"] {
+    background: rgba(12, 24, 44, 0.88) !important;
+    border: 1px solid rgba(118, 162, 255, 0.16) !important;
+    border-radius: 16px !important;
+    color: var(--text-main) !important;
+  }
+  .stInfo {
+    border-left: 4px solid var(--accent) !important;
+  }
+  .stWarning {
+    background: rgba(45, 30, 10, 0.88) !important;
+    border-left: 4px solid var(--amber) !important;
+  }
+  .stError {
+    background: rgba(52, 18, 24, 0.88) !important;
+    border-left: 4px solid #ff6b7a !important;
+  }
+  hr {
+    border-color: rgba(118, 162, 255, 0.12);
+  }
 </style>
 """,
     unsafe_allow_html=True,
 )
 
 CHART_LAYOUT = dict(
-    paper_bgcolor="white",
-    plot_bgcolor="#f8faff",
-    font_color="#111827",
+    paper_bgcolor="rgba(8, 17, 31, 0)",
+    plot_bgcolor="rgba(11, 22, 39, 0.88)",
+    font_color="#dbe7ff",
     font_family="sans-serif",
-    xaxis=dict(gridcolor="#dbeafe", linecolor="#dbeafe", tickcolor="#9ca3af"),
-    yaxis=dict(gridcolor="#dbeafe", linecolor="#dbeafe", tickcolor="#9ca3af"),
-    legend=dict(bgcolor="white", bordercolor="#dbeafe", borderwidth=1),
+    margin=dict(l=20, r=20, t=40, b=20),
+    xaxis=dict(
+        gridcolor="rgba(124, 151, 201, 0.16)",
+        linecolor="rgba(124, 151, 201, 0.18)",
+        tickcolor="#7f8fb3",
+        zerolinecolor="rgba(124, 151, 201, 0.16)",
+    ),
+    yaxis=dict(
+        gridcolor="rgba(124, 151, 201, 0.16)",
+        linecolor="rgba(124, 151, 201, 0.18)",
+        tickcolor="#7f8fb3",
+        zerolinecolor="rgba(124, 151, 201, 0.16)",
+    ),
+    legend=dict(
+        bgcolor="rgba(8, 18, 33, 0.92)",
+        bordercolor="rgba(118, 162, 255, 0.18)",
+        borderwidth=1,
+        font=dict(color="#dbe7ff"),
+    ),
 )
 
 
@@ -70,16 +210,23 @@ def prepare_display_data(combined, analyzed):
 
 
 def render_empty_state():
-    st.title("IndiaFin Dashboard")
-    st.markdown("---")
+    st.markdown(
+        """
+<div class="hero">
+  <div class="hero-kicker">IndiaFin Terminal</div>
+  <div class="hero-title">Market dashboard offline</div>
+  <div class="hero-subtitle">
+    The analytics layer is healthy, but live pricing is temporarily unavailable. The app will recover automatically once upstream data starts responding again.
+  </div>
+</div>
+""",
+        unsafe_allow_html=True,
+    )
     st.error("Live market data is currently unavailable. Please try again in a few minutes.")
     st.info("The app stays available, but charts are hidden until we receive usable stock data.")
 
 
 def render_dashboard(combined, analyzed):
-    st.title("IndiaFin Dashboard")
-    st.markdown("---")
-
     st.sidebar.header("Filters")
     tickers = analyzed["Ticker"].dropna().unique().tolist()
 
@@ -105,6 +252,25 @@ def render_dashboard(combined, analyzed):
     volatility = latest["Volatility"]
     above_ma30 = latest["Close"] > latest["MA30"]
     trend = "Bullish" if above_ma30 else "Bearish"
+    trend_accent = "#3ddc97" if above_ma30 else "#ff8a65"
+
+    st.markdown(
+        f"""
+<div class="hero">
+  <div class="hero-kicker">IndiaFin Terminal</div>
+  <div class="hero-title">{selected_ticker} intelligence dashboard</div>
+  <div class="hero-subtitle">
+    Track momentum, volatility, and cross-market relationships for key Indian equities with a cleaner dark trading-desk presentation.
+  </div>
+  <div class="hero-strip">
+    <div class="hero-pill">Window: {time_range}</div>
+    <div class="hero-pill">Ticker: {selected_ticker}</div>
+    <div class="hero-pill">Trend: <span style="color:{trend_accent}; font-weight:700;">{trend}</span></div>
+  </div>
+</div>
+""",
+        unsafe_allow_html=True,
+    )
 
     col1, col2, col3, col4 = st.columns(4)
     col1.metric("Current Price", f"Rs {current_price:.2f}")
@@ -136,14 +302,19 @@ def render_dashboard(combined, analyzed):
     st.subheader(f"Price Trend - {selected_ticker}")
     fig = go.Figure()
     fig.add_trace(
-        go.Scatter(x=stock_df["Date"], y=stock_df["Close"], name="Close Price", line=dict(color="#1a56db", width=2))
+        go.Scatter(
+            x=stock_df["Date"],
+            y=stock_df["Close"],
+            name="Close Price",
+            line=dict(color="#6cb7ff", width=3),
+        )
     )
     fig.add_trace(
         go.Scatter(
             x=stock_df["Date"],
             y=stock_df["MA7"],
             name="7-Day MA",
-            line=dict(color="#f59e0b", width=1.5, dash="dot"),
+            line=dict(color="#ffb347", width=1.8, dash="dot"),
         )
     )
     fig.add_trace(
@@ -151,7 +322,7 @@ def render_dashboard(combined, analyzed):
             x=stock_df["Date"],
             y=stock_df["MA30"],
             name="30-Day MA",
-            line=dict(color="#10b981", width=1.5, dash="dash"),
+            line=dict(color="#3ddc97", width=1.8, dash="dash"),
         )
     )
     fig.update_layout(**CHART_LAYOUT)
@@ -165,8 +336,8 @@ def render_dashboard(combined, analyzed):
             y=stock_df["Volatility"],
             name="Volatility",
             fill="tozeroy",
-            fillcolor="rgba(26, 86, 219, 0.10)",
-            line=dict(color="#1a56db", width=2),
+            fillcolor="rgba(51, 208, 255, 0.12)",
+            line=dict(color="#33d0ff", width=2.4),
         )
     )
     fig2.update_layout(**CHART_LAYOUT)
@@ -179,10 +350,10 @@ def render_dashboard(combined, analyzed):
             x=stock_df["Date"],
             y=stock_df["Volume"],
             name="Volume",
-            marker_color="#1a56db",
-            marker_line_color="#1648c0",
+            marker_color="#5aa7ff",
+            marker_line_color="#79bdff",
             marker_line_width=0.5,
-            opacity=0.85,
+            opacity=0.9,
         )
     )
     fig3.update_layout(**CHART_LAYOUT)
@@ -199,8 +370,17 @@ def render_dashboard(combined, analyzed):
         logger.warning("Correlation matrix is empty because returns data is insufficient")
         st.warning("Not enough synchronized market data is available to build the correlation matrix yet.")
     else:
-        fig4 = px.imshow(corr, text_auto=True, color_continuous_scale="Blues", zmin=-1, zmax=1)
-        fig4.update_layout(paper_bgcolor="white", font_color="#111827")
+        fig4 = px.imshow(corr, text_auto=True, color_continuous_scale="Tealgrn", zmin=-1, zmax=1)
+        fig4.update_layout(
+            paper_bgcolor="rgba(8, 17, 31, 0)",
+            plot_bgcolor="rgba(11, 22, 39, 0.88)",
+            font_color="#dbe7ff",
+            coloraxis_colorbar=dict(
+                tickcolor="#7f8fb3",
+                tickfont=dict(color="#dbe7ff"),
+                outlinecolor="rgba(118, 162, 255, 0.18)",
+            ),
+        )
         st.plotly_chart(fig4, use_container_width=True)
 
     st.caption(
